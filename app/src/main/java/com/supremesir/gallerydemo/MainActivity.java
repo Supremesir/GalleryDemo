@@ -3,6 +3,7 @@ package com.supremesir.gallerydemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -16,12 +17,15 @@ import com.supremesir.gallerydemo.databinding.ActivityMainBinding;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "Error";
     ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         String url = "https://www.jd.com";
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -37,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        binding.textView.setText("Error");
+                        Log.d(TAG, "onErrorResponse: ", error);
                     }
                 }
         );
