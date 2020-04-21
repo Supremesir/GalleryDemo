@@ -23,6 +23,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.supremesir.gallerydemo.databinding.ActivityMainBinding;
 
+import java.util.Random;
+
 /**
  * @author fang
  */
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Error";
     ActivityMainBinding binding;
+    String url1 = "https://cdn.pixabay.com/photo/2020/04/03/15/27/flower-meadow-4999277_1280.jpg";
+    String url2 = "https://cdn.pixabay.com/photo/2015/04/08/15/09/daisy-712892_1280.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,28 +42,41 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String url = "https://cdn.pixabay.com/photo/2020/04/03/15/27/flower-meadow-4999277_1280.jpg";
+
         RequestQueue queue = Volley.newRequestQueue(this);
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadImage();
+            }
+        });
+    }
+
+    void loadImage() {
+        Random random = new Random();
+        String url = random.nextBoolean() ? url1 : url2;
         Glide.with(this)
                 .load(url)
                 .placeholder(R.drawable.ic_launcher_background)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        if (binding.swipeRefreshLayout.isRefreshing()) {
+                            binding.swipeRefreshLayout.setRefreshing(false);
+                        }
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (binding.swipeRefreshLayout.isRefreshing()) {
+                            binding.swipeRefreshLayout.setRefreshing(false);
+                        }
                         return false;
                     }
                 })
                 .into(binding.imageView);
-        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
 
-            }
-        });
     }
+
 }
