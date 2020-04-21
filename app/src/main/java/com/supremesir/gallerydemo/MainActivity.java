@@ -1,8 +1,10 @@
 package com.supremesir.gallerydemo;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.LruCache;
@@ -13,6 +15,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.supremesir.gallerydemo.databinding.ActivityMainBinding;
 
 /**
@@ -32,22 +39,21 @@ public class MainActivity extends AppCompatActivity {
 
         String url = "https://cdn.pixabay.com/photo/2020/04/03/15/27/flower-meadow-4999277_1280.jpg";
         RequestQueue queue = Volley.newRequestQueue(this);
-        ImageLoader imageLoader = new ImageLoader(queue, new ImageLoader.ImageCache() {
-            // 设置容量为50的缓存
-            // Lru - Last Recently Used
-            private LruCache<String, Bitmap> cache = new LruCache<>(50);
+        Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.ic_launcher_background)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
 
-            @Override
-            public Bitmap getBitmap(String url) {
-                return cache.get(url);
-            }
-
-            @Override
-            public void putBitmap(String url, Bitmap bitmap) {
-                cache.put(url, bitmap);
-            }
-        });
-        binding.imageView.setImageUrl(url, imageLoader);
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(binding.imageView);
 
     }
 }
