@@ -2,6 +2,7 @@ package com.supremesir.gallerydemo;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -54,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .into(binding.imageView);
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
 
+            }
+        });
     }
 }
