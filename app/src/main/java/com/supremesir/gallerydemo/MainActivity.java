@@ -47,17 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 cache.put(url, bitmap);
             }
         });
-        imageLoader.get(url, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                binding.imageView.setImageBitmap(response.getBitmap());
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "onErrorResponse: ", error);
-            }
-        });
+        binding.imageView.setImageUrl(url, imageLoader);
 
     }
 }
